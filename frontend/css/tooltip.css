@@ -1,0 +1,16 @@
+div.tooltip {
+    position: absolute;
+    background: cadetblue;
+    text-align: left;
+    width: 150px;
+    height: auto;
+    padding: 10px;
+    border-radius: 5px;
+    pointer-events: none;
+    font-size: 12px;
+}
+div.tooltip img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+}

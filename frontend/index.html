@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paneles Redimensionables con Divisiones</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <script src="./js/visualizacion.js" defer></script>
+    <script src="./js/redimensionamiento_comparticiones.js" defer></script>
+
+    <link rel="stylesheet" href="./css/boceto.css">
+    <link rel="stylesheet" href="./css/tooltip.css">
+    <link rel="stylesheet" href="./css/leyenda.css">
+    <link rel="stylesheet" href="./css/nav_bar.css">
+    <link rel="stylesheet" href="./css/menu.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Panel izquierdo -->
+        <div id="left-panel" class="panel">
+            <div class="legend-nav">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ff0000;"></div>
+                    <div class="legend-label">Clase 1</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #00ff00;"></div>
+                    <div class="legend-label">Clase 2</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #0000ff;"></div>
+                    <div class="legend-label">Clase 3</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffff00;"></div>
+                    <div class="legend-label">Clase 4</div>
+                </div>
+            </div>
+
+            <div class="radio-group" id="tipo-etiquetas">
+                <label class="radio-label">
+                    <input type="radio" name="etiquetas" value="reales" checked>
+                    <span class="radio-custom"></span>
+                    Etiquetas Reales
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="etiquetas" value="predichas">
+                    <span class="radio-custom"></span>
+                    Etiquetas Predichas
+                </label>
+            </div>
+
+            <label for="division-select">
+                N° de divisiones:
+                <select id="division-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </label>
+
+            <div class="controls">
+                <button id="toggle-brush">Activar Brush</button>
+                <button id="explain-selected">Explicar Seleccionados</button>
+            </div>
+        </div>
+
+        <!-- Divisor izquierdo -->
+        <div id="left-divider" class="divider vertical-divider"></div>
+
+        <!-- Panel central -->
+        <div id="center-panel" class="panel">
+            <div id="workspace-container">
+                <!-- Las divisiones se generarán aquí -->
+            </div>
+        </div>
+
+        <!-- Divisor derecho -->
+        <div id="right-divider" class="divider vertical-divider"></div>
+
+        <!-- Panel derecho -->
+        <div id="right-panel" class="panel">
+            <div class="right-top">
+                <h3>Zoom</h3>
+            </div>
+            <!-- Divisor horizontal -->
+            <div id="horizontal-divider" class="divider horizontal-divider"></div>
+            <div class="right-bottom">
+                <h3>Explicabilidad</h3>
+            </div>
+        </div>
+    </div>
+    <div class="tooltip"></div>
+</body>
+</html>

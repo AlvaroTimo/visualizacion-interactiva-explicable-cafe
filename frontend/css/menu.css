@@ -1,0 +1,142 @@
+#left-panel {
+    width: 250px;
+    padding: 20px;
+    background-color: #222; 
+    color: #f5f5f5; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.legend-nav {
+    background-color: #333; 
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    border: 1px solid #444; 
+}
+
+.radio-group {
+    background-color: #333; 
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); 
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #f5f5f5;
+    cursor: pointer;
+}
+
+.radio-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-custom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #444; 
+    border: 2px solid #777; 
+    border-radius: 50%;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.radio-label:hover input ~ .radio-custom {
+    background-color: #555;
+}
+
+.radio-label input:checked ~ .radio-custom {
+    background-color: #2196F3;
+    border-color: #2196F3;
+}
+
+.radio-custom:after {
+    content: "";
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    transform: translate(-50%, -50%);
+}
+
+.radio-label input:checked ~ .radio-custom:after {
+    display: block;
+}
+
+#division-select {
+    width: calc(100% - 10px); 
+    padding: 8px;
+    background-color: #333;
+    color: #f5f5f5;
+    border: 1px solid #444;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    max-width: calc(100% - 125px);
+}
+
+#division-select {
+    margin-bottom: 15px;
+}
+
+#division-select:hover,
+#division-select:focus {
+    border-color: #666;
+}
+
+.controls button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); 
+}
+
+.controls button:hover {
+    background-color: #1e87e5; 
+}
+
+.controls button:active {
+    background-color: #1b76c2; 
+    transform: translateY(2px); 
+}

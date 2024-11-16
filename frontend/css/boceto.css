@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.panel {
+    height: 100%;
+    overflow: hidden;
+    transition: width 0.1s ease;
+}
+
+#left-panel {
+    width: 200px;
+    background-color: #f0f0f0;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+#center-panel {
+    flex: 1 1 auto;
+    background-color: #ffffff;
+    padding: 10px;
+    max-width: calc(100% - 16px);
+}
+
+#right-panel {
+    width: 300px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.panel.collapsed {
+    width: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+#left-panel label {
+    display: block;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+
+#left-panel select {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.workspace-division {
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+#workspace-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
+    padding: 10px;
+}
+
+.right-top, .right-bottom {
+    padding: 10px;
+    background-color: #ffffff;
+    overflow: hidden;
+    min-height: 0px;
+    flex-shrink: 0;
+}
+
+.right-top {
+    height: 50%;
+}
+
+.right-bottom {
+    flex-grow: 1;
+}
+
+.divider {
+    position: absolute;
+    background-color: #ccc;
+    z-index: 100;
+    transition: left 0.1s ease, right 0.1s ease;
+}
+
+.divider:hover {
+    background-color: #999;
+}
+
+.vertical-divider {
+    width: 8px;
+    height: 100%;
+    cursor: ew-resize;
+    flex-shrink: 0;
+}
+
+.horizontal-divider {
+    width: 100%;
+    height: 8px;
+    cursor: ns-resize;
+}
+
+#left-divider {
+    left: 200px;
+}
+
+#right-divider {
+    right: 300px;
+}
+
+#horizontal-divider {
+    right: 0;
+    width: 300px;
+    top: 50%;
+}
+
+.dragging {
+    background-color: #666;
+}
+
+.grid-layout {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100%;
+}
+
+.right-top.collapsed,
+.right-bottom.collapsed {
+    height: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.horizontal-divider {
+    cursor: ns-resize;
+    height: 8px;
+    background-color: #ccc;
+    transition: top 0.1s ease;
+}
+
+.horizontal-divider:hover {
+    background-color: #999;
+}
+
