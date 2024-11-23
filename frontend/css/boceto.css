@@ -86,7 +86,7 @@ body {
 .right-top, .right-bottom {
     padding: 10px;
     background-color: #ffffff;
-    overflow: hidden;
+    /* overflow: hidden; */
     min-height: 0px;
     flex-shrink: 0;
 }

@@ -1,7 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const SIZE_POINT = 2;
-    const SIZE_POINT_SELECTED = 5;
-    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00'];
+    window.SIZE_POINT = 4;
+    window.SIZE_POINT_SELECTED = 8;
+    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffee00'];
+
+    // const colors = ['#FA4032', '#892CDC', '#3D3BF3', '#32CD32'];
+    // const colors = ['#E63946', '#FFB703', '#0081A7', '#8A4FFF'];
+    // const colors = ['#D7263D', '#3E8914', '#3165D4', '#7A1EA1'];
+    // const colors = ['#E63946', '#52B788', '#457B9D', '#F4A261'];
+    // const colors = ['#FFEB00', '#7A1EA1', '#32CD32', '#1E90FF'];
+
+
     let globalSelectedIndices = new Set();
     let isBrushActive = false;
 
@@ -56,8 +64,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 src: "images/" + data_response["Nombres de los archivos"][i],
                 trueLabel: data_response["Etiquetas reales"][i],
                 predictLabel: data_response["Etiquetas predichas"][i],
-                fileName: data_response["Nombres de los archivos"][i]
+                fileName: data_response["Nombres de los archivos"][i],
+                probability: (data_response["Probabilidades"][i] * 100).toFixed(2)
             });
+
+            // console.log(data_response["Probabilidades"])
         }
     }
 
@@ -101,6 +112,8 @@ document.addEventListener("DOMContentLoaded", function() {
         container.style.width = '100%';
     
         selectedData.forEach(d => {
+            // console.log("Imprimendo d",probability)
+
             const scaledX = xScale(d.x);  
             const scaledY = yScale(d.y);  
     
@@ -233,6 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .attr("cy", d => yScale(d.y))
                 .attr("r", d => globalSelectedIndices.has(d.fileName) ? SIZE_POINT_SELECTED : SIZE_POINT)
                 .attr("fill", d => getColor(d[etiquetasVisualizacion]))
+                .attr("opacity", d => d.probability / 100)
                 .on("mouseover", function (event, d) {
                     d3.select(this)
                         .transition()
@@ -244,20 +258,23 @@ document.addEventListener("DOMContentLoaded", function() {
                         .style("opacity", 0.9);
 
                     const clases = parsedData["Nombres de las clases"];
+                    // const probabilities = parsedData["Probabilidades"]
+                    
                     tooltip.html(`<div style="text-align: center;">
                                 <img id="tooltip-image" src="${d.src}" alt="Imagen del grano de cafe" style="width: 100px; height: 100px;">
                                 <p> Clase real: ${clases[d.trueLabel]} </p>
                                 <p> Clase predicha: ${clases[d.predictLabel]} </p>
+                                <p> Probabilidad: ${d.probability} %</p>
                                 <button id="explain-button">Explicar</button>
                               </div>`)
                             .style("left", `${event.pageX + 10}px`)
                             .style("top", `${event.pageY + 10}px`);
                 })
-                .on("mouseout", function () {
+                .on("mouseout", function (event, d) {
                     d3.select(this)
                         .transition()
                         .duration(100)
-                        .style('opacity', 1);
+                        .style('opacity', d.probability/100);
                     tooltip.transition()
                         .duration(100)
                         .style("opacity", 0);
@@ -387,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
                         <!-- Contenedor Scrollable de Modelos -->
                         <div style="display: flex; flex-direction: row; gap: 20px;">
-                            ${windows.map(win => `
+                            ${windows.slice(0, window.NUM_WINDOWS).map(win => `
                                 <div style="
                                     display: flex;
                                     flex-direction: column;
@@ -410,12 +427,18 @@ document.addEventListener("DOMContentLoaded", function() {
                                     </div>
                                 </div>
                             `).join('')}
+
                         </div>
                     </div>
                 `).join('')}
             </div>
         `;
     });
+
+    document.getElementById("clear-selected").addEventListener('click', function() {
+        globalSelectedIndices.clear();
+        updateAllWindows();
+    })
 
     function doZoomWindow(windowId){
         const win = getWindowById(windowId);
@@ -480,6 +503,9 @@ document.addEventListener("DOMContentLoaded", function() {
     window.changeModel = changeModel
     window.changeProjection = changeProjection
     window.doZoomWindow = doZoomWindow
+    window.SIZE_POINT = SIZE_POINT
+    window.SIZE_POINT_SELECTED = SIZE_POINT_SELECTED
+    
 });
 
 

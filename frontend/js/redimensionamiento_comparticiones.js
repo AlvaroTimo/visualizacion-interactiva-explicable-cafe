@@ -80,10 +80,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
             if (count === 1) {
                 div.style.height = '100%';
+                window.SIZE_POINT = 4
+                window.SIZE_POINT_SELECTED = 8
+                window.NUM_WINDOWS = 1
             } else if (count === 2) {
                 div.style.height = '50%';
+                window.SIZE_POINT = 3
+                window.SIZE_POINT_SELECTED = 6
+                window.NUM_WINDOWS = 2
             } else if (count === 3) {
                 div.style.height = '33.333%';
+                window.SIZE_POINT = 2.5
+                window.SIZE_POINT_SELECTED = 5
+                window.NUM_WINDOWS = 3
+            } else {
+                window.SIZE_POINT = 2
+                window.SIZE_POINT_SELECTED = 3
+                window.NUM_WINDOWS = 4
             }
             
             containerDiv.appendChild(nav);
