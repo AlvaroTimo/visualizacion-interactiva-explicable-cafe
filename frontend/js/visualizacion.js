@@ -409,8 +409,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
             classes.forEach((className, i) => {
                 confusionTable += `<tr><th>True ${className}</th>`;
-                confusionMatrix[i].forEach(value => {
-                    confusionTable += `<td>${value}</td>`;
+                confusionMatrix[i].forEach((value, j) => {
+                    confusionTable += `<td class="confusion-cell" data-true="${i}" data-pred="${j}">${value}</td>`;
                 });
                 confusionTable += '</tr>';
             });
@@ -421,16 +421,51 @@ document.addEventListener("DOMContentLoaded", function() {
             matrixDiv.className = 'confusion-matrix-container';
             matrixDiv.innerHTML = '<h4>Confusion Matrix</h4>' + confusionTable;
             modelContainer.appendChild(matrixDiv);
-        }        
-    }
+    
+            const cells = matrixDiv.querySelectorAll('.confusion-cell');
+            cells.forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const trueIndex = parseInt(cell.getAttribute('data-true'));
+                    const predIndex = parseInt(cell.getAttribute('data-pred'));
+    
+                    const win = windows.find(w => w.id === windowId);
+                    if (!win || !win.data) return;
+    
+                    const associatedFiles = win.data
+                        .filter(item => item.trueLabel === trueIndex && item.predictLabel === predIndex)
+                        .map(item => item.fileName);
+    
+                    associatedFiles.forEach(fileName => {
+                        if (globalSelectedIndices.has(fileName)) {
+                            globalSelectedIndices.delete(fileName);
+                        } else {
+                            globalSelectedIndices.add(fileName);
 
-    function updateAllWindows() {
+                        }
+                    });
+                    
+                    windows.forEach(win => {
+                        plotearPuntos(win)
+                    });
+
+                    cell.classList.toggle('selected-cell');
+
+                });
+            });
+        }
+    }
+    
+
+    function updateAllWindows(callback) {
         windows.forEach(win => {
             plotearPuntos(win, () => {
                 updateTable(win.selectedModel, win.id);
             });
         });
+        if(callback)
+            callback()
     }
+
 
     function changeModel(selectedValue,windowId){
         const win = getWindowById(windowId);
