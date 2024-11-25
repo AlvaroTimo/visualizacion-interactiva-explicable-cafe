@@ -3,13 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.SIZE_POINT_SELECTED = 8;
     const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffee00'];
 
-    // const colors = ['#FA4032', '#892CDC', '#3D3BF3', '#32CD32'];
-    // const colors = ['#E63946', '#FFB703', '#0081A7', '#8A4FFF'];
-    // const colors = ['#D7263D', '#3E8914', '#3165D4', '#7A1EA1'];
-    // const colors = ['#E63946', '#52B788', '#457B9D', '#F4A261'];
-    // const colors = ['#FFEB00', '#7A1EA1', '#32CD32', '#1E90FF'];
-
-
     let globalSelectedIndices = new Set();
     let isBrushActive = false;
 
@@ -215,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //     zoomWindow.document.write('</div></body></html>');
     // }
     
-    function plotearPuntos(win) {
+    function plotearPuntos(win,callback) {
         d3.json(`http://localhost:3000/predicciones/${win.selectedModel}`)
         .then(parsedData => {
             generate_points(parsedData, `Coordenadas ${win.selectedProjection}`, win);
@@ -311,15 +304,131 @@ document.addEventListener("DOMContentLoaded", function() {
                     .attr("class", "brush")
                     .call(brush);
             }
+            if (callback) callback();
         })
         .catch(err => {
             console.error(err);
         });
     }
 
+    function getMetricValue(windowId, metricIndex) {
+        const win = windows.find(w => w.id === windowId);
+        if (!win || !win.data) return 0;
+    
+        const classes = ["defect", "longberry", "peaberry", "premium"];
+        const numClasses = classes.length;
+    
+        const confusionMatrix = Array(numClasses).fill().map(() => Array(numClasses).fill(0));
+        
+        win.data.forEach(({ trueLabel, predictLabel }) => {
+            confusionMatrix[trueLabel][predictLabel]++;
+        });
+    
+        const metrics = classes.map((_, classIndex) => {
+            let tp = confusionMatrix[classIndex][classIndex];
+            let fp = confusionMatrix.reduce((sum, row, i) => 
+                i !== classIndex ? sum + row[classIndex] : sum, 0);
+            let fn = confusionMatrix[classIndex].reduce((sum, val, i) => 
+                i !== classIndex ? sum + val : sum, 0);
+            let tn = confusionMatrix.reduce((sum1, row, i) => 
+                i !== classIndex ? sum1 + row.reduce((sum2, val, j) => 
+                    j !== classIndex ? sum2 + val : sum2, 0) : sum1, 0);
+    
+            return {
+                accuracy: (tp + tn) / (tp + tn + fp + fn) || 0,
+                precision: tp / (tp + fp) || 0,
+                recall: tp / (tp + fn) || 0,
+                f1: tp ? (2 * tp) / (2 * tp + fp + fn) : 0
+            };
+        });
+    
+        const globalMetrics = {
+            accuracy: metrics.reduce((sum, m) => sum + m.accuracy, 0) / numClasses,
+            precision: metrics.reduce((sum, m) => sum + m.precision, 0) / numClasses,
+            recall: metrics.reduce((sum, m) => sum + m.recall, 0) / numClasses,
+            f1: metrics.reduce((sum, m) => sum + m.f1, 0) / numClasses,
+            confusionMatrix
+        };
+    
+        switch (metricIndex) {
+            case 1: return globalMetrics.accuracy.toFixed(3);
+            case 2: return globalMetrics.recall.toFixed(3);
+            case 3: return globalMetrics.precision.toFixed(3);
+            case 4: return globalMetrics.f1.toFixed(3);
+            case 5: return globalMetrics.confusionMatrix;
+            default: return 0;
+        }
+    }
+    
+    function updateTable(selectedValue, windowId) {
+        const panel = document.getElementById("left-panel");
+        if (!panel) return;
+    
+        let modelContainer = panel.querySelector(`div[data-window="${windowId}"]`);
+        
+        if (!modelContainer) {
+            const existingContainers = panel.querySelectorAll('div[data-window]');
+            if (existingContainers.length >= window.NUM_WINDOWS) {
+                return;
+            }
+    
+            modelContainer = document.createElement('div');
+            modelContainer.setAttribute('data-window', windowId);
+            modelContainer.className = 'model-container mb-4';
+            panel.appendChild(modelContainer);
+        }
+    
+        modelContainer.innerHTML = `
+            <h3 class="model-name mb-2">${selectedValue}</h3>
+            <table class="metrics-table mb-2">
+                <tr>
+                    <th>Accuracy</th>
+                    <th>Recall</th>
+                    <th>Precision</th>
+                    <th>F1 Score</th>
+                </tr>
+                <tr>
+                    <td>${getMetricValue(windowId, 1)}</td>
+                    <td>${getMetricValue(windowId, 2)}</td>
+                    <td>${getMetricValue(windowId, 3)}</td>
+                    <td>${getMetricValue(windowId, 4)}</td>
+                </tr>
+            </table>
+        `;
+    
+        const confusionMatrix = getMetricValue(windowId, 5);
+        if (confusionMatrix) {
+            const classes = ["defect", "longberry", "peaberry", "premium"];
+            let confusionTable = '<table class="confusion-matrix">';
+            
+            confusionTable += '<tr><th></th>';
+            classes.forEach(className => {
+                confusionTable += `<th>Pred ${className}</th>`;
+            });
+            confusionTable += '</tr>';
+    
+            classes.forEach((className, i) => {
+                confusionTable += `<tr><th>True ${className}</th>`;
+                confusionMatrix[i].forEach(value => {
+                    confusionTable += `<td>${value}</td>`;
+                });
+                confusionTable += '</tr>';
+            });
+    
+            confusionTable += '</table>';
+            
+            const matrixDiv = document.createElement('div');
+            matrixDiv.className = 'confusion-matrix-container';
+            matrixDiv.innerHTML = '<h4>Confusion Matrix</h4>' + confusionTable;
+            modelContainer.appendChild(matrixDiv);
+        }        
+    }
+
     function updateAllWindows() {
         windows.forEach(win => {
-            plotearPuntos(win);
+            plotearPuntos(win, () => {
+                updateTable(win.selectedModel, win.id);
+            });
         });
     }
 
@@ -327,7 +436,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const win = getWindowById(windowId);
         if (win) {
             win.selectedModel = selectedValue;
-            plotearPuntos(win);
+            
+            plotearPuntos(win, () => {
+                updateTable(selectedValue, windowId);
+            });
+
             tooltip.transition().duration(3000).style("opacity",0);
         }
     }

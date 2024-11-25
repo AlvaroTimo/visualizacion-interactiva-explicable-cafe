@@ -21,7 +21,8 @@ body {
 
 .panel {
     height: 100%;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
     transition: width 0.1s ease;
 }
 

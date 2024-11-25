@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Estado inicial de los paneles
     let state = {
-        leftWidth: 230,
+        leftWidth: 360,
         rightWidth: 300,
         isLeftCollapsed: false,
         isRightCollapsed: false,
@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="dropdown-content">
                                 <a href="#" class="dropdown-option-model" data-window="${windowId}" data-value="VGG19">VGG19</a>
                                 <a href="#" class="dropdown-option-model" data-window="${windowId}" data-value="Xception">Xception</a>
+                                <a href="#" class="dropdown-option-model" data-window="${windowId}" data-value="ResNet50V2">ResNet50V2</a>
+                                <a href="#" class="dropdown-option-model" data-window="${windowId}" data-value="DenseNet201">DenseNet201</a>
 
                             </div>
                         </li>

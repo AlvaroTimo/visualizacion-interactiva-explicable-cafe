@@ -1,0 +1,134 @@
+.model-container {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 8px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.model-name {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.tables-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0; 
+    width: 100%;
+}
+
+.metrics-table,
+.confusion-matrix {
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 0.85em;
+    table-layout: fixed;
+}
+
+.metrics-table th,
+.metrics-table td,
+.confusion-matrix th,
+.confusion-matrix td {
+    padding: 3px 4px;
+    text-align: center;
+    border: 1px solid #555;
+    word-break: break-word;
+    line-height: 1.1;
+}
+
+.metrics-table {
+    margin-bottom: 8px;
+}
+
+.metrics-table th {
+    font-size: 0.8em;
+    max-width: 60px;
+    color: #fff;
+}
+
+.confusion-matrix-container h4 {
+    font-size: 1em;
+    margin: 8px 0 4px;
+    text-align: center;
+}
+
+.confusion-matrix th {
+    font-size: 0.8em;
+    max-width: 60px;
+}
+
+.label-prefix {
+    font-size: 0.9em;
+    display: block;
+    color: #aaa;
+}
+
+#left-panel {
+    background-color: #333;
+    padding: 8px;
+    overflow-x: hidden;
+}
+
+@media (max-width: 400px) {
+    .metrics-table,
+    .confusion-matrix {
+        font-size: 0.75em;
+    }
+    
+    .metrics-table th,
+    .confusion-matrix th {
+        max-width: 40px;
+    }
+}
+
+@media (min-width: 768px) {
+    .model-container {
+        padding: 15px;
+    }
+    
+    .metrics-table,
+    .confusion-matrix {
+        font-size: 0.95em;
+    }
+    
+    .metrics-table th,
+    .metrics-table td,
+    .confusion-matrix th,
+    .confusion-matrix td {
+        padding: 5px 6px;
+    }
+    
+    .metrics-table th,
+    .confusion-matrix th {
+        max-width: 80px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .model-container {
+        padding: 20px;
+    }
+    
+    .metrics-table,
+    .confusion-matrix {
+        font-size: 1em;
+    }
+    
+    .metrics-table th,
+    .metrics-table td,
+    .confusion-matrix th,
+    .confusion-matrix td {
+        padding: 6px 8px;
+    }
+    
+    .metrics-table th,
+    .confusion-matrix th {
+        max-width: 100px;
+    }
+}

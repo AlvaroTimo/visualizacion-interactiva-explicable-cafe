@@ -229,6 +229,5 @@ pyrightconfig.json
 
 
 /frontend/images/
-/backend/modelos_output/antiguos/
-/backend/modelos_output/*_vectores*
+*_vectores*
 
