@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.NUM_WINDOWS = 3
             } else {
                 window.SIZE_POINT = 2
-                window.SIZE_POINT_SELECTED = 3
+                window.SIZE_POINT_SELECTED = 4
                 window.NUM_WINDOWS = 4
             }
             

@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", function() {
     let etiquetasVisualizacion = "trueLabel"
 
     const windows = [
-        { id: "window1", selectedIndices: new Set(), data: [], selectedModel: "Xception", selectedProjection: "UMAP" },
+        { id: "window1", selectedIndices: new Set(), data: [], selectedModel: "VGG19", selectedProjection: "UMAP" },
         { id: "window2", selectedIndices: new Set(), data: [], selectedModel: "Xception", selectedProjection: "TSNE" },
-        { id: "window3", selectedIndices: new Set(), data: [], selectedModel: "Xception", selectedProjection: "TRIMAP" },
-        { id: "window4", selectedIndices: new Set(), data: [], selectedModel: "Xception", selectedProjection: "PACMAP" }
+        { id: "window3", selectedIndices: new Set(), data: [], selectedModel: "DenseNet201", selectedProjection: "TRIMAP" },
+        { id: "window4", selectedIndices: new Set(), data: [], selectedModel: "ResNet50V2", selectedProjection: "PACMAP" }
     ];
 
     const tooltip = d3.select(".tooltip");
@@ -319,7 +319,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const numClasses = classes.length;
     
         const confusionMatrix = Array(numClasses).fill().map(() => Array(numClasses).fill(0));
-        
         win.data.forEach(({ trueLabel, predictLabel }) => {
             confusionMatrix[trueLabel][predictLabel]++;
         });
@@ -342,8 +341,11 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         });
     
+        const totalCorrect = confusionMatrix.reduce((sum, row, i) => sum + row[i], 0); 
+        const totalSamples = confusionMatrix.flat().reduce((sum, val) => sum + val, 0); 
+
         const globalMetrics = {
-            accuracy: metrics.reduce((sum, m) => sum + m.accuracy, 0) / numClasses,
+            accuracy: totalCorrect / totalSamples, 
             precision: metrics.reduce((sum, m) => sum + m.precision, 0) / numClasses,
             recall: metrics.reduce((sum, m) => sum + m.recall, 0) / numClasses,
             f1: metrics.reduce((sum, m) => sum + m.f1, 0) / numClasses,
@@ -454,7 +456,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
     }
-    
 
     function updateAllWindows(callback) {
         windows.forEach(win => {
