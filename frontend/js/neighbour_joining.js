@@ -1,11 +1,30 @@
+const precachedModels = {};
+
+
 async function loadJSON(file) {
     const response = await fetch(file);
     return response.json();
 }
 
+async function preloadModels(modelNames) {
+    for (const modelName of modelNames) {
+        const vectorsData = await loadJSON(`../../backend/modelos_ouput/${modelName}_vectores.json`);
+        const labelsData = await loadJSON(`../../backend/modelos_ouput/${modelName}.json`);
+        
+        precachedModels[modelName] = { vectorsData, labelsData };
+    }
+    console.log("Todos los modelos se han precargado.");
+}
+
+
 async function main(model_name,selectedIndices) {
-    const vectorsData = await loadJSON(`../../backend/modelos_ouput/${model_name}_vectores.json`);
-    const labelsData = await loadJSON(`../../backend/modelos_ouput/${model_name}.json`);
+    if (!precachedModels[model_name]) {
+        throw new Error(`El modelo ${model_name} no está precargado.`);
+    }
+
+    const { vectorsData, labelsData } = precachedModels[model_name];
+    // const vectorsData = await loadJSON(`../../backend/modelos_ouput/${model_name}_vectores.json`);
+    // const labelsData = await loadJSON(`../../backend/modelos_ouput/${model_name}.json`);
     
     const vectors = [];
     const labels = [];
@@ -186,20 +205,32 @@ node.append("circle")
     .on("mouseover", function (event, d) {
         if (d.depth !== 0) {
             const id = d.data.id;
+    
             tooltip.transition()
                 .duration(100)
                 .style("opacity", 0.9);
-
+    
             tooltip.html(`
                 <img src="images/${data.images[id]}" alt="Imagen del grano de café">
-                <p>Real: ${data.realLabels[id]}</p>
-                <p>Pred: ${data.predictedLabels[id]}</p>
-                <p>Prob: ${(data.probabilities[id] * 100).toFixed(1)}%</p>
+                <table>
+                    <tr>
+                        <td>Real:</td>
+                        <td>${data.realLabels[id]}</td>
+                    </tr>
+                    <tr>
+                        <td>Pred:</td>
+                        <td>${data.predictedLabels[id]}</td>
+                    </tr>
+                    <tr>
+                        <td>Prob:</td>
+                        <td>${(data.probabilities[id] * 100).toFixed(1)}%</td>
+                    </tr>
+                </table>
             `)
                 .style("left", `${event.pageX + 10}px`)
                 .style("top", `${event.pageY + 10}px`);
         }
-    })
+    })    
     .on("mouseout", function (event, d) {
         if (d.depth !== 0) {
             tooltip.transition()
@@ -280,3 +311,10 @@ node.append("circle")
         renderTreeRadial(tree, data);
     });
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const modelNames = ["VGG19", "DenseNet201", "Xception", "ResNet50V2"];
+    console.log("Cargando modelos")
+    await preloadModels(modelNames);
+    console.log("Aplicación lista para usar.");
+});

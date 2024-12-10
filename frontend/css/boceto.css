@@ -111,7 +111,7 @@ body {
 .divider {
     position: absolute;
     background-color: #ccc;
-    /* z-index: 100; */
+    z-index: 0;
     transition: left 0.1s ease, right 0.1s ease;
 }
 

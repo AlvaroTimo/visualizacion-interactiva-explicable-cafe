@@ -254,12 +254,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     // const probabilities = parsedData["Probabilidades"]
                     
                     tooltip.html(`<div style="text-align: center;">
-                                <img id="tooltip-image" src="${d.src}" alt="Imagen del grano de cafe" style="width: 100px; height: 100px;">
-                                <p> Clase real: ${clases[d.trueLabel]} </p>
-                                <p> Clase predicha: ${clases[d.predictLabel]} </p>
-                                <p> Probabilidad: ${d.probability} %</p>
-                                <button id="explain-button">Explicar</button>
+                                <img id="tooltip-image" src="${d.src}" alt="Imagen del grano de cafe"">
+                                <p> Real: ${clases[d.trueLabel]} </p>
+                                <p> Pred: ${clases[d.predictLabel]} </p>
+                                <p> Prob: ${d.probability} %</p>
+                                
                             </div>`)
+                            // <button id="explain-button">Explicar</button>
                             .style("left", `${event.pageX + 10}px`)
                             .style("top", `${event.pageY + 10}px`);
                 })
