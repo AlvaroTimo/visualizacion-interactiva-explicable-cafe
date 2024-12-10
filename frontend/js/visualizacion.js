@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
     window.SIZE_POINT = 4;
     window.SIZE_POINT_SELECTED = 8;
-    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffee00'];
+    const colors = ['navy', 'turquoise', 'darkorange','green']
+    // const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffee00'];
 
     let globalSelectedIndices = new Set();
-    let isBrushActive = false;
+    let isBrushActive = false;  
 
     let etiquetasVisualizacion = "trueLabel"
 
@@ -16,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
     ];
 
     const tooltip = d3.select(".tooltip");
-
     
     function getWindowById(id) {
         return windows.find(w => w.id === id);
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <p> Clase predicha: ${clases[d.predictLabel]} </p>
                                 <p> Probabilidad: ${d.probability} %</p>
                                 <button id="explain-button">Explicar</button>
-                              </div>`)
+                            </div>`)
                             .style("left", `${event.pageX + 10}px`)
                             .style("top", `${event.pageY + 10}px`);
                 })
@@ -467,7 +467,6 @@ document.addEventListener("DOMContentLoaded", function() {
             callback()
     }
 
-
     function changeModel(selectedValue,windowId){
         const win = getWindowById(windowId);
         if (win) {
@@ -594,12 +593,20 @@ document.addEventListener("DOMContentLoaded", function() {
         zoomWindow(win); 
     }
 
-    document.querySelectorAll('.zoom-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const windowId = this.getAttribute('data-window');
-            doZoomWindow(windowId)
-        });
-    });
+    FIRST_TIME_NJ = false
+    function doNeihgbourJoining(windowId){
+        if (globalSelectedIndices.size === 0) {
+            alert('No hay puntos seleccionados.');
+            return;
+        }
+    
+        const selectedIndices = windows[0].data
+            .map((d, index) => globalSelectedIndices.has(d.fileName) ? index : -1)  // Asignamos -1 si no cumple con la condición
+            .filter(index => index !== -1);  // Filtramos los -1, quedándonos solo con los índices válidos
+
+        const window = windows.find(w => w.id === windowId); 
+        main(window.selectedModel,selectedIndices)
+    }
 
     let activeWindow = null;
     let initialX, initialY, initialMouseX, initialMouseY;
@@ -652,9 +659,10 @@ document.addEventListener("DOMContentLoaded", function() {
     window.changeModel = changeModel
     window.changeProjection = changeProjection
     window.doZoomWindow = doZoomWindow
+    window.doNeihgbourJoining = doNeihgbourJoining
     window.SIZE_POINT = SIZE_POINT
     window.SIZE_POINT_SELECTED = SIZE_POINT_SELECTED
-    
+
 });
 
 

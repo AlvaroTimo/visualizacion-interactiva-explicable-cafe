@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.innerHTML = `
                 <div class="nav-content ${count > 1 && count < 4 ? 'vertical' : ''}">
                     <button class="zoom-btn" data-window="${windowId}">🔍</button>
+                    <button class="nj-btn" data-window="${windowId}">NJ</button>
+
                     <ul class="nav-list">
                         <li class="nav-item dropdown">
                             <a href="#" class="dropbtn model-dropbtn" data-window="${windowId}">MODELO</a>
@@ -140,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     
+        document.querySelectorAll('.nj-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const windowId = this.getAttribute('data-window');
+                doNeihgbourJoining(windowId)
+            });
+        });
         updateAllWindows();
     }
 

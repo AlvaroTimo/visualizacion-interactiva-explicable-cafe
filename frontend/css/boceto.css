@@ -84,10 +84,18 @@ body {
     padding: 10px;
 }
 
-.right-top, .right-bottom {
+.right-top{
+    padding: 0px;
+    background-color: #ffffff;
+    overflow: scroll;
+    min-height: 0px;
+    flex-shrink: 0;
+}
+
+.right-bottom {
     padding: 10px;
     background-color: #ffffff;
-    /* overflow: hidden; */
+    overflow: scroll;
     min-height: 0px;
     flex-shrink: 0;
 }
@@ -103,7 +111,7 @@ body {
 .divider {
     position: absolute;
     background-color: #ccc;
-    z-index: 100;
+    /* z-index: 100; */
     transition: left 0.1s ease, right 0.1s ease;
 }
 

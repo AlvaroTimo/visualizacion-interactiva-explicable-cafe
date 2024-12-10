@@ -6,6 +6,7 @@
     <title>Paneles Redimensionables con Divisiones</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     
+    <script src="./js/neighbour_joining.js" defer></script>
     <script src="./js/visualizacion.js" defer></script>
     <script src="./js/redimensionamiento_comparticiones.js" defer></script>
 
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="./css/metrics.css">
     <link rel="stylesheet" href="./css/nav_bar.css">
     <link rel="stylesheet" href="./css/menu.css">
+    <link rel="stylesheet" href="./css/neighbour_joining.css">
 </head>
 
 <body>
@@ -22,19 +24,19 @@
         <div id="left-panel" class="panel">
             <div class="legend-nav">
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #ff0000;"></div>
+                    <div class="legend-color" style="background-color: navy;"></div>
                     <div class="legend-label">Defect</div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #00ff00;"></div>
+                    <div class="legend-color" style="background-color: turquoise;"></div>
                     <div class="legend-label">Longberry</div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #0000ff;"></div>
+                    <div class="legend-color" style="background-color: darkorange;"></div>
                     <div class="legend-label">Peaberry</div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #ffee00;"></div>
+                    <div class="legend-color" style="background-color: green;"></div>
                     <div class="legend-label">Premium</div>
                 </div>
             </div>
@@ -87,12 +89,10 @@
         <!-- Panel derecho -->
         <div id="right-panel" class="panel">
             <div class="right-top">
-                <h3>Zoom</h3>
             </div>
             <!-- Divisor horizontal -->
             <div id="horizontal-divider" class="divider horizontal-divider"></div>
             <div class="right-bottom">
-                <h3>Explicabilidad</h3>
             </div>
         </div>
     </div>

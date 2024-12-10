@@ -1,0 +1,94 @@
+.link {
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 1.5px;
+}
+
+.node circle {
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+.node text {
+    font: 10px sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+}
+
+div.tooltip {
+    position: absolute;
+    background: cadetblue;
+    text-align: center;
+    width: 150px; /* Más pequeño */
+    height: auto;
+    padding: 5px; /* Reducido */
+    border-radius: 5px;
+    pointer-events: none;
+    font-size: 12px;
+    color: white;
+}
+
+div.tooltip img {
+    width: 50%; /* Reduce al 50% */
+    height: auto;
+    margin-bottom: 5px; /* Margen reducido */
+}
+
+#details-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f0f0f0; /* Fondo claro para destacar */
+    border-top: 2px solid #ccc; /* Separador claro */
+}
+
+#details-container div {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    background: white;
+    width: 120px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+#details-container div img {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+}
+
+#details-container div p {
+    margin: 5px 0;
+    font-size: 10px; /* Tamaño reducido */
+    line-height: 1.2; /* Compactar texto */
+}
+
+#details-container div button {
+    margin-top: 5px;
+    font-size: 10px;
+    padding: 2px 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: cadetblue;
+    color: white;
+    cursor: pointer;
+}
+
+#details-container div button:hover {
+    background-color: darkslategray;
+}

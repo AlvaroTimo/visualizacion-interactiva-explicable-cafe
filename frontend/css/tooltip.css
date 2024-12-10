@@ -8,6 +8,7 @@ div.tooltip {
     border-radius: 5px;
     pointer-events: none;
     font-size: 12px;
+    opacity: 0;
 }
 div.tooltip img {
     width: 100%;
