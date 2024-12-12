@@ -9,29 +9,6 @@
     box-sizing: border-box;
 }
 
-.legend-nav {
-    background-color: #333; 
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.legend-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 5px;
-    margin-right: 10px;
-    border: 1px solid #444; 
-}
-
 .radio-group {
     background-color: #333; 
     padding: 15px;

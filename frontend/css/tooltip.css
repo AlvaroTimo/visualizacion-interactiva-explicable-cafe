@@ -1,17 +1,37 @@
 div.tooltip {
     position: absolute;
-    /* background: cadetblue; */
+    background: #ffffff;
     text-align: left;
-    width: 100px;
-    height: auto;
-    padding: 10px;
+    padding: 10px; 
     border-radius: 5px;
+    border: 1px solid black; 
     pointer-events: none;
-    font-size: 12px;
-    opacity: 0;
+    font-size: 10px;
+    color: black; 
+    z-index: 1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
 }
+
 div.tooltip img {
-    width: 100%;
+    width: 70px; 
     height: auto;
-    margin-bottom: 5px;
+    display: block; 
+    margin: 0 auto 5px; 
+}
+
+div.tooltip table {
+    width: 100%; 
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+div.tooltip table td {
+    padding: 2px 5px; 
+    font-size: 11px; 
+    text-align: left; 
+}
+
+div.tooltip table td:first-child {
+    font-weight: bold; 
+    text-align: right; 
 }

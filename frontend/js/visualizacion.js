@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let etiquetasVisualizacion = "trueLabel"
 
-    const windows = [
+    window.windows = [
         { id: "window1", selectedIndices: new Set(), data: [], selectedModel: "VGG19", selectedProjection: "UMAP" },
         { id: "window2", selectedIndices: new Set(), data: [], selectedModel: "Xception", selectedProjection: "TSNE" },
         { id: "window3", selectedIndices: new Set(), data: [], selectedModel: "DenseNet201", selectedProjection: "TRIMAP" },
@@ -70,79 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return colors[index % colors.length];
     }
     
-    function zoomWindow(win) {
-        const selectedData = win.data.filter(d => globalSelectedIndices.has(d.fileName));
-    
-        if (selectedData.length === 0) {
-            alert('No hay puntos seleccionados.');
-            return;
-        }
-    
-        const minX = d3.min(selectedData, d => d.x);
-        const maxX = d3.max(selectedData, d => d.x);
-        const minY = d3.min(selectedData, d => d.y);
-        const maxY = d3.max(selectedData, d => d.y);
-    
-        const xScale = d3.scaleLinear()
-            .domain([minX, maxX])
-            .range([20, 80]); 
-    
-        const yScale = d3.scaleLinear()
-            .domain([minY, maxY])
-            .range([20, 80]);  
-    
-        const imageSize = Math.max(70, Math.min(100, 400 / selectedData.length));
-        const borderSize = Math.max(1, imageSize / 30); 
-    
-        const container = document.querySelector('.right-top');
-    
-        container.innerHTML = '';
-    
-        container.style.position = 'relative';
-        container.style.display = 'flex';
-        container.style.flexWrap = 'wrap';
-        container.style.height = '50%';
-        container.style.width = '100%';
-    
-        selectedData.forEach(d => {
-            // console.log("Imprimendo d",probability)
-
-            const scaledX = xScale(d.x);  
-            const scaledY = yScale(d.y);  
-    
-            const imgContainer = document.createElement('div');
-            imgContainer.style.position = 'absolute';
-            imgContainer.style.left = `${scaledX}%`;
-            imgContainer.style.top = `${scaledY}%`;
-            imgContainer.style.border = `${borderSize}px solid ${getColor(d[etiquetasVisualizacion])}`;
-    
-            const img = document.createElement('img');
-            img.src = d.src;
-            img.alt = "Imagen";
-            img.style.width = `${imageSize}px`;
-            img.style.height = `${imageSize}px`;
-            img.style.opacity = '0.8';
-            img.style.transition = 'opacity 0.3s ease, transform 0.3s ease, z-index 0.3s ease';
-            img.style.borderRadius = '3px';
-            img.style.position = 'relative';
-    
-            img.addEventListener('mouseover', () => {
-                img.style.opacity = '1';
-                img.style.transform = 'scale(1.2)';
-                img.style.zIndex = '100';
-            });
-    
-            img.addEventListener('mouseout', () => {
-                img.style.opacity = '0.8';
-                img.style.transform = 'scale(1)';
-                img.style.zIndex = '1';
-            });
-    
-            imgContainer.appendChild(img);
-            container.appendChild(imgContainer);
-        });
-    }
-    
     // function zoomWindow(win) {
     //     const selectedData = win.data.filter(d => globalSelectedIndices.has(d.fileName));
     
@@ -151,74 +78,160 @@ document.addEventListener("DOMContentLoaded", function() {
     //         return;
     //     }
     
-    //     // Definir las escalas basadas solo en los puntos seleccionados
     //     const minX = d3.min(selectedData, d => d.x);
     //     const maxX = d3.max(selectedData, d => d.x);
     //     const minY = d3.min(selectedData, d => d.y);
     //     const maxY = d3.max(selectedData, d => d.y);
     
-    //     // Escalas para reescalar las coordenadas a todo el tamaño de la ventana
     //     const xScale = d3.scaleLinear()
     //         .domain([minX, maxX])
-    //         .range([0, 100]); 
+    //         .range([20, 80]); 
     
     //     const yScale = d3.scaleLinear()
     //         .domain([minY, maxY])
-    //         .range([0, 100]);  // El rango de 0% a 100% para aprovechar el espacio vertical
+    //         .range([20, 80]);  
     
-
     //     const imageSize = Math.max(70, Math.min(100, 400 / selectedData.length));
-    
     //     const borderSize = Math.max(1, imageSize / 30); 
     
-    //     const zoomWindow = window.open('', '_blank', 'width=800,height=600');
-    //     zoomWindow.document.write(`
-    //     <html>
-    //       <head>
-    //         <title>Zoom de Puntos Seleccionados</title>
-    //         <style>
-    //           img { 
-    //             opacity: 0.8; 
-    //             transition: opacity 0.3s ease, transform 0.3s ease, z-index 0.3s ease;
-    //             position: relative;
-    //             border-radius: 3px;
-    //           }
-    //           img:hover { 
-    //             opacity: 1; 
-    //             transform: scale(1.2); /* Aumenta el tamaño al hacer hover */
-    //             z-index: 100; /* Trae la imagen al frente */
-    //           }
-    //         </style>
-    //       </head>
-    //       <body>
-    //         <div style="display:flex;flex-wrap:wrap;position:relative; height:100%; width:100%;">
-    //     `);
+    //     const container = document.querySelector('.right-top');
+    
+    //     container.innerHTML = '';
+    
+    //     container.style.position = 'relative';
+    //     container.style.display = 'flex';
+    //     container.style.flexWrap = 'wrap';
+    //     container.style.height = '50%';
+    //     container.style.width = '100%';
     
     //     selectedData.forEach(d => {
+    //         // console.log("Imprimendo d",probability)
+
     //         const scaledX = xScale(d.x);  
     //         const scaledY = yScale(d.y);  
     
-    //         zoomWindow.document.write(`
-    //             <div style="position:absolute; left:${scaledX}%; top:${scaledY}%; border: ${borderSize}px solid ${getColor(d.className)};">
-    //                 <img src="${d.src}" alt="Imagen" style="width: ${imageSize}px; height: ${imageSize}px;">
-    //             </div>
-    //         `);
-    //     });
+    //         const imgContainer = document.createElement('div');
+    //         imgContainer.style.position = 'absolute';
+    //         imgContainer.style.left = `${scaledX}%`;
+    //         imgContainer.style.top = `${scaledY}%`;
+    //         imgContainer.style.border = `${borderSize}px solid ${getColor(d[etiquetasVisualizacion])}`;
     
-    //     zoomWindow.document.write('</div></body></html>');
+    //         const img = document.createElement('img');
+    //         img.src = d.src;
+    //         img.alt = "Imagen";
+    //         img.style.width = `${imageSize}px`;
+    //         img.style.height = `${imageSize}px`;
+    //         img.style.opacity = '0.8';
+    //         img.style.transition = 'opacity 0.3s ease, transform 0.3s ease, z-index 0.3s ease';
+    //         img.style.borderRadius = '3px';
+    //         img.style.position = 'relative';
+    
+    //         img.addEventListener('mouseover', () => {
+    //             img.style.opacity = '1';
+    //             img.style.transform = 'scale(1.2)';
+    //             img.style.zIndex = '100';
+    //         });
+    
+    //         img.addEventListener('mouseout', () => {
+    //             img.style.opacity = '0.8';
+    //             img.style.transform = 'scale(1)';
+    //             img.style.zIndex = '1';
+    //         });
+    
+    //         imgContainer.appendChild(img);
+    //         container.appendChild(imgContainer);
+    //     });
     // }
+    
+    function zoomWindow(win) {
+        const selectedData = win.data.filter(d => globalSelectedIndices.has(d.fileName));
+    
+        if (selectedData.length === 0) {
+            alert('No hay puntos seleccionados.');
+            return;
+        }
+    
+        // Definir las escalas basadas solo en los puntos seleccionados
+        const minX = d3.min(selectedData, d => d.x);
+        const maxX = d3.max(selectedData, d => d.x);
+        const minY = d3.min(selectedData, d => d.y);
+        const maxY = d3.max(selectedData, d => d.y);
+    
+        // Escalas para reescalar las coordenadas a todo el tamaño de la ventana
+        const xScale = d3.scaleLinear()
+            .domain([minX, maxX])
+            .range([0, 100]); 
+    
+        const yScale = d3.scaleLinear()
+            .domain([minY, maxY])
+            .range([0, 100]);  // El rango de 0% a 100% para aprovechar el espacio vertical
+    
+
+        const imageSize = Math.max(70, Math.min(100, 400 / selectedData.length));
+    
+        const borderSize = Math.max(1, imageSize / 30); 
+    
+        const zoomWindow = window.open('', '_blank', 'width=800,height=600');
+        zoomWindow.document.write(`
+        <html>
+          <head>
+            <title>Zoom de Puntos Seleccionados</title>
+            <style>
+              img { 
+                opacity: 0.8; 
+                transition: opacity 0.3s ease, transform 0.3s ease, z-index 0.3s ease;
+                position: relative;
+                border-radius: 3px;
+              }
+              img:hover { 
+                opacity: 1; 
+                transform: scale(1.2); /* Aumenta el tamaño al hacer hover */
+                z-index: 100; /* Trae la imagen al frente */
+              }
+            </style>
+          </head>
+          <body>
+            <div style="display:flex;flex-wrap:wrap;position:relative; height:100%; width:100%;">
+        `);
+    
+        selectedData.forEach(d => {
+            const scaledX = xScale(d.x);  
+            const scaledY = yScale(d.y);  
+    
+            zoomWindow.document.write(`
+                <div style="position:absolute; left:${scaledX}%; top:${scaledY}%; border: ${borderSize}px solid ${getColor(d.className)};">
+                    <img src="${d.src}" alt="Imagen" style="width: ${imageSize}px; height: ${imageSize}px;">
+                </div>
+            `);
+        });
+    
+        zoomWindow.document.write('</div></body></html>');
+    }
+    
     
     function plotearPuntos(win,callback) {
         d3.json(`http://localhost:3000/predicciones/${win.selectedModel}`)
         .then(parsedData => {
             generate_points(parsedData, `Coordenadas ${win.selectedProjection}`, win);
             
+            // console.log("Imprimiendo ventana",win.id)
+
             const canvas = d3.select(`#${win.id} .canva`);
             canvas.selectAll("svg").remove();
 
             const svg = canvas.append("svg")
                     .attr("width", "100%")
-                    .attr("height", "100%");
+                    .attr("height", "100%")
+                    .on("click", function (event, d) {
+                        isBrushActive = !isBrushActive
+                        plotearPuntos(win)
+                    })
+                    .on("dblclick", function(event) {
+                        clearSelected()
+                        updateAllWindows()
+                    })
+                    
+
 
             const width = canvas.node().clientWidth;
             const height = canvas.node().clientHeight;
@@ -241,6 +254,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .attr("fill", d => getColor(d[etiquetasVisualizacion]))
                 .attr("opacity", d => d.probability / 100)
                 .on("mouseover", function (event, d) {
+                    event.stopPropagation();
                     d3.select(this)
                         .transition()
                         .duration(100)
@@ -265,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .style("top", `${event.pageY + 10}px`);
                 })
                 .on("mouseout", function (event, d) {
+                    event.stopPropagation();
                     d3.select(this)
                         .transition()
                         .duration(100)
@@ -274,6 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         .style("opacity", 0);
                 })
                 .on("click", function (event, d) {
+                    event.stopPropagation();
                     if (globalSelectedIndices.has(d.fileName)) {
                         globalSelectedIndices.delete(d.fileName);
                     } else {
@@ -297,7 +313,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
                                     selected.forEach(fileName => globalSelectedIndices.add(fileName));
                                     updateAllWindows();
-
+                                    explainSelected();
+                                    doNeihgbourJoining(win.id);
                                     svg.select(".brush").call(brush.move, null);
                                 });
 
@@ -451,6 +468,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         plotearPuntos(win)
                     });
 
+                    if(globalSelectedIndices.size > 0){
+                        explainSelected()
+                        // doNeihgbourJoining(windowId)
+                    }
+                    
+
                     cell.classList.toggle('selected-cell');
 
                 });
@@ -464,6 +487,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateTable(win.selectedModel, win.id);
             });
         });
+
         if(callback)
             callback()
     }
@@ -507,13 +531,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     initializeRadioButtons()
 
-    document.getElementById("toggle-brush").addEventListener("click", function() {
-        isBrushActive = !isBrushActive;
-        this.innerText = isBrushActive ? "Desactivar Brush" : "Activar Brush";
-        updateAllWindows();
-    });
+    // document.getElementById("toggle-brush").addEventListener("click", function() {
+    //     isBrushActive = !isBrushActive;
+    //     this.innerText = isBrushActive ? "Desactivar Brush" : "Activar Brush";
+    //     updateAllWindows();
+    // });
 
-    document.getElementById("explain-selected").addEventListener('click', function() {
+    function explainSelected() {
         if (globalSelectedIndices.size === 0) {
             alert('No hay puntos seleccionados.');
             return;
@@ -582,12 +606,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 `).join('')}
             </div>
         `;
-    });
+    };
 
-    document.getElementById("clear-selected").addEventListener('click', function() {
+    function clearSelected(){
         globalSelectedIndices.clear();
         updateAllWindows();
-    })
+    }
+
+    // document.getElementById("clear-selected").addEventListener('click', function() {
+    //     clearSelected()
+    // })
 
     function doZoomWindow(windowId){
         const win = getWindowById(windowId);
@@ -656,6 +684,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isResizing = false;
     }
 
+    window.windows = windows
     window.updateAllWindows = updateAllWindows
     window.changeModel = changeModel
     window.changeProjection = changeProjection

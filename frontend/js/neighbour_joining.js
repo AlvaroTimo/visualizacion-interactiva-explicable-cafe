@@ -291,10 +291,6 @@ node.append("circle")
         }
     });
 
-        
-    
-    
-
     // Redimensionar el gráfico cuando la ventana cambie de tamaño
     window.addEventListener("resize", () => {
         const width = svgContainer.node().clientWidth;

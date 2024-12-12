@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
             workspaceContainer.classList.add('grid-layout');
         } else {
             workspaceContainer.style.flexDirection = 'column';
-            workspaceContainer.style.height = '100%';
+            workspaceContainer.style.height = '93%';
+            // workspaceContainer.style.width = '100%';
         }
     
         for (let i = 0; i < count; i++) {
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <ul class="nav-list">
                         <li class="nav-item dropdown">
-                            <a href="#" class="dropbtn model-dropbtn" data-window="${windowId}">MODELO</a>
+                            <a href="#" class="dropbtn model-dropbtn" data-window="${windowId}">${windows[i].selectedModel}</a>
                             <div class="dropdown-content">
                                 <a href="#" class="dropdown-option-model" data-window="${windowId}" data-value="VGG19">VGG19</a>
                                 <a href="#" class="dropdown-option-model" data-window="${windowId}" data-value="Xception">Xception</a>
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a href="#" class="dropbtn proj-dropbtn" data-window="${windowId}">PROYECCIÓN</a>
+                            <a href="#" class="dropbtn proj-dropbtn" data-window="${windowId}">${windows[i].selectedProjection}</a>
                             <div class="dropdown-content">
                                 <a href="#" class="dropdown-option-proj" data-window="${windowId}" data-value="UMAP">UMAP</a>
                                 <a href="#" class="dropdown-option-proj" data-window="${windowId}" data-value="TSNE">t-SNE</a>

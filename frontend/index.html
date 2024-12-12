@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paneles Redimensionables con Divisiones</title>
+    <title> Visualizacion café</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     
     <script src="./js/neighbour_joining.js" defer></script>
     <script src="./js/visualizacion.js" defer></script>
     <script src="./js/redimensionamiento_comparticiones.js" defer></script>
 
+    <link rel="stylesheet" href="./css/leyenda.css">
     <link rel="stylesheet" href="./css/boceto.css">
     <link rel="stylesheet" href="./css/tooltip.css">
     <link rel="stylesheet" href="./css/metrics.css">
@@ -22,24 +23,6 @@
     <div class="container">
         <!-- Panel izquierdo -->
         <div id="left-panel" class="panel">
-            <div class="legend-nav">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: navy;"></div>
-                    <div class="legend-label">Defect</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: turquoise;"></div>
-                    <div class="legend-label">Longberry</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: darkorange;"></div>
-                    <div class="legend-label">Peaberry</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: green;"></div>
-                    <div class="legend-label">Premium</div>
-                </div>
-            </div>
 
             <div class="radio-group" id="tipo-etiquetas">
                 <label class="radio-label">
@@ -64,11 +47,11 @@
                 </select>
             </label>
 
-            <div class="controls">
+            <!-- <div class="controls">
                 <button id="toggle-brush">Activar Brush</button>
                 <button id="explain-selected">Explicar Seleccionados</button>
                 <button id="clear-selected">Quitar Seleccionados</button>
-            </div>
+            </div> -->
 
             
         </div>
@@ -78,7 +61,26 @@
 
         <!-- Panel central -->
         <div id="center-panel" class="panel">
+            <div class="legend-nav">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: navy;"></div>
+                    <div class="legend-label">Defect</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: turquoise;"></div>
+                    <div class="legend-label">Longberry</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: darkorange;"></div>
+                    <div class="legend-label">Peaberry</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: green;"></div>
+                    <div class="legend-label">Premium</div>
+                </div>
+            </div>
             <div id="workspace-container">
+                
                 <!-- Las divisiones se generarán aquí -->
             </div>
         </div>
