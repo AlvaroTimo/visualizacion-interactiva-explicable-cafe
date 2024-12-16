@@ -89,6 +89,7 @@ body {
     overflow: scroll;
     min-height: 0px;
     flex-shrink: 0;
+    height: 50%;
 }
 
 .right-bottom {
@@ -97,6 +98,7 @@ body {
     overflow: scroll;
     min-height: 0px;
     flex-shrink: 0;
+    height: 50%;
 }
 
 .right-top {
@@ -109,13 +111,13 @@ body {
 
 .divider {
     position: absolute;
-    background-color: #ccc;
+    background: linear-gradient(to right, #000000, #ffffff); 
     z-index: 0;
     transition: left 0.1s ease, right 0.1s ease;
 }
 
 .divider:hover {
-    background-color: #999;
+    background: linear-gradient(to right, #333333, #cccccc); 
 }
 
 .vertical-divider {
@@ -123,12 +125,23 @@ body {
     height: 100%;
     cursor: ew-resize;
     flex-shrink: 0;
+    background: linear-gradient(to left, #000000, #ffffff, #000000); 
+}
+
+.vertical-divider:hover {
+    background: linear-gradient(to left, #333333, #cccccc, #333333); 
 }
 
 .horizontal-divider {
+
     width: 100%;
     height: 8px;
     cursor: ns-resize;
+    background: linear-gradient(to bottom, #000000, #ffffff, #000000);
+}
+
+.horizontal-divider:hover {
+    background: linear-gradient(to bottom, #333333, #cccccc, #333333); 
 }
 
 #left-divider {
@@ -156,6 +169,8 @@ body {
     grid-template-rows: 1fr 1fr;
     height: 100%;
 }
+
+
 
 .right-top.collapsed,
 .right-bottom.collapsed {

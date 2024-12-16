@@ -1,7 +1,6 @@
 .model-container {
     background-color: #f9f9f9;
     color: #333;
-    padding: 10px;
     border-radius: 8px;
     margin: 8px auto;
     display: flex;
@@ -94,9 +93,6 @@
 }
 
 @media (min-width: 768px) {
-    .model-container {
-        padding: 15px;
-    }
     
     .metrics-table,
     .confusion-matrix {
@@ -117,9 +113,6 @@
 }
 
 @media (min-width: 1200px) {
-    .model-container {
-        padding: 20px;
-    }
     
     .metrics-table,
     .confusion-matrix {
