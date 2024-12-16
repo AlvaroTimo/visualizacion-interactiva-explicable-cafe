@@ -1,11 +1,11 @@
 .legend-nav {
-    background-color: #333; 
+    /* background-color: #333;  */
     padding: 15px;
     border-radius: 8px;
     display: flex;
-    flex-direction: row; /* Fila */
-    align-items: center; /* Alineación vertical centrada */
-    justify-content: space-around; /* Distribuye los elementos en el espacio disponible */
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: space-around; 
 }
 
 .legend-item {

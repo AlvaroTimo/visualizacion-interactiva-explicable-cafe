@@ -1,4 +1,5 @@
 const precachedModels = {};
+window.selectedNodesNJ = new Set();
 
 
 async function loadJSON(file) {
@@ -21,6 +22,13 @@ async function main(model_name,selectedIndices) {
     if (!precachedModels[model_name]) {
         throw new Error(`El modelo ${model_name} no está precargado.`);
     }
+
+    selectedNodesNJ.clear();
+    const detailsContainer = d3.select("#details-container");
+    if (!detailsContainer.empty()) {
+        detailsContainer.remove();
+    }
+
 
     const { vectorsData, labelsData } = precachedModels[model_name];
     // const vectorsData = await loadJSON(`../../backend/modelos_ouput/${model_name}_vectores.json`);
@@ -195,101 +203,102 @@ function renderTreeRadial(tree, data) {
             translate(${d.y},0)
         `);
     
-// Set para rastrear nodos seleccionados
-const selectedNodes = new Set();
 
-node.append("circle")
-    .attr("r", 4)
-    .attr("fill", d => d.depth === 0 ? "black" : colors[data.realLabels[d.data.id]])
-    .attr("opacity", d => d.depth === 0 ? 1 : data.probabilities[d.data.id])
-    .on("mouseover", function (event, d) {
-        if (d.depth !== 0) {
-            const id = d.data.id;
     
-            tooltip.transition()
-                .duration(100)
-                .style("opacity", 0.9);
-    
-            tooltip.html(`
-                <img src="images/${data.images[id]}" alt="Imagen del grano de café">
-                <table>
-                    <tr>
-                        <td>Real:</td>
-                        <td>${data.realLabels[id]}</td>
-                    </tr>
-                    <tr>
-                        <td>Pred:</td>
-                        <td>${data.predictedLabels[id]}</td>
-                    </tr>
-                    <tr>
-                        <td>Prob:</td>
-                        <td>${(data.probabilities[id] * 100).toFixed(1)}%</td>
-                    </tr>
-                </table>
-            `)
-                .style("left", `${event.pageX + 10}px`)
-                .style("top", `${event.pageY + 10}px`);
-        }
-    })    
-    .on("mouseout", function (event, d) {
-        if (d.depth !== 0) {
-            tooltip.transition()
-                .duration(100)
-                .style("opacity", 0);
-        }
-    })
-    .on("click", function (event, d) {
-        if (d.depth !== 0) {
-            const id = d.data.id;
 
-            // Manejar selección y deselección del nodo
-            if (selectedNodes.has(id)) {
-                selectedNodes.delete(id);
-                d3.select(this).transition().duration(200).attr("r", 4);
-                d3.select(`#detail-${id}`).remove();
-            } else {
-                selectedNodes.add(id);
-                d3.select(this).transition().duration(200).attr("r", 8);
-
-                // Crear o encontrar el contenedor de detalle
-                let detailsContainer = d3.select("#details-container");
-                if (detailsContainer.empty()) {
-                    detailsContainer = d3.select(".right-top").append("div")
-                        .attr("id", "details-container")
-                        .style("display", "flex")
-                        .style("flex-wrap", "wrap")
-                        .style("gap", "10px")
-                        .style("padding", "10px")
-                        .style("background-color", "#f0f0f0");
-                }
-
-                // Agregar tarjeta de detalle
-                const detailDiv = detailsContainer.append("div")
-                    .attr("id", `detail-${id}`)
-                    .style("border", "1px solid #ccc")
-                    .style("border-radius", "5px")
-                    .style("padding", "5px")
-                    .style("background", "white")
-                    .style("width", "120px")
-                    .style("text-align", "center");
-
-                detailDiv.html(`
-                    <img src="images/${data.images[id]}" alt="Imagen del grano de café" style="width: 100%; height: auto; border-radius: 3px;">
-                    <p style="margin: 5px 0; font-size: 10px;">Real: ${data.realLabels[id]}</p>
-                    <p style="margin: 5px 0; font-size: 10px;">Pred: ${data.predictedLabels[id]}</p>
-                    <p style="margin: 5px 0; font-size: 10px;">Prob: ${(data.probabilities[id] * 100).toFixed(1)}%</p>
-                    <button style="margin-top: 5px; font-size: 10px; padding: 2px 5px; border: none; border-radius: 3px; background-color: cadetblue; color: white; cursor: pointer;">Eliminar</button>
-                `);
-
-                // Evento para eliminar tarjeta
-                detailDiv.select("button").on("click", () => {
-                    selectedNodes.delete(id);
-                    d3.select(this).transition().duration(200).attr("r", 4);
-                    detailDiv.remove();
-                });
+    node.append("circle")
+        .attr("r", 4)
+        .attr("fill", d => d.depth === 0 ? "black" : colors[data.realLabels[d.data.id]])
+        .attr("opacity", d => d.depth === 0 ? 1 : data.probabilities[d.data.id])
+        .on("mouseover", function (event, d) {
+            if (d.depth !== 0) {
+                const id = d.data.id;
+        
+                tooltip.transition()
+                    .duration(100)
+                    .style("opacity", 0.9);
+        
+                tooltip.html(`
+                    <img src="images/${data.images[id]}" alt="Imagen del grano de café">
+                    <table>
+                        <tr>
+                            <td>Real:</td>
+                            <td>${data.realLabels[id]}</td>
+                        </tr>
+                        <tr>
+                            <td>Pred:</td>
+                            <td>${data.predictedLabels[id]}</td>
+                        </tr>
+                        <tr>
+                            <td>Prob:</td>
+                            <td>${(data.probabilities[id] * 100).toFixed(1)}%</td>
+                        </tr>
+                    </table>
+                `)
+                    .style("left", `${event.pageX + 10}px`)
+                    .style("top", `${event.pageY + 10}px`);
             }
-        }
-    });
+        })    
+        .on("mouseout", function (event, d) {
+            if (d.depth !== 0) {
+                tooltip.transition()
+                    .duration(100)
+                    .style("opacity", 0);
+            }
+        })
+        .on("click", function (event, d) {
+            if (d.depth !== 0) {
+                const id = d.data.id;
+                const imageName = data.images[id]; 
+        
+                // Manejar selección y deselección del nodo
+                if (selectedNodesNJ.has(imageName)) {
+                    selectedNodesNJ.delete(imageName); 
+                    d3.select(this).transition().duration(200).attr("r", 4);
+                    d3.select(`#detail-${id}`).remove();
+                } else {
+                    selectedNodesNJ.add(imageName); 
+                    d3.select(this).transition().duration(200).attr("r", 8);
+        
+                    let detailsContainer = d3.select("#details-container");
+                    if (detailsContainer.empty()) {
+                        detailsContainer = d3.select(".right-top").append("div")
+                            .attr("id", "details-container")
+                            .style("display", "flex")
+                            .style("flex-wrap", "wrap")
+                            .style("gap", "10px")
+                            .style("padding", "10px")
+                            .style("background-color", "#f0f0f0");
+                    }
+        
+                    const detailDiv = detailsContainer.append("div")
+                        .attr("id", `detail-${id}`)
+                        .style("border", "1px solid #ccc")
+                        .style("border-radius", "5px")
+                        .style("padding", "5px")
+                        .style("background", "white")
+                        .style("width", "120px")
+                        .style("text-align", "center");
+        
+                    detailDiv.html(`
+                        <img src="images/${imageName}" alt="Imagen del grano de café" style="width: 100%; height: auto; border-radius: 3px;">
+                        <p style="margin: 5px 0; font-size: 10px;">Real: ${data.realLabels[id]}</p>
+                        <p style="margin: 5px 0; font-size: 10px;">Pred: ${data.predictedLabels[id]}</p>
+                        <p style="margin: 5px 0; font-size: 10px;">Prob: ${(data.probabilities[id] * 100).toFixed(1)}%</p>
+                        <button style="margin-top: 5px; font-size: 10px; padding: 2px 5px; border: none; border-radius: 3px; background-color: cadetblue; color: white; cursor: pointer;">Eliminar</button>
+                    `);
+        
+                    // Evento para eliminar tarjeta
+                    detailDiv.select("button").on("click", () => {
+                        selectedNodesNJ.delete(imageName);
+                        d3.select(this).transition().duration(200).attr("r", 4);
+                        detailDiv.remove();
+                    });
+                }
+            }
+            updateAllWindows()
+        });
+        
 
     // Redimensionar el gráfico cuando la ventana cambie de tamaño
     window.addEventListener("resize", () => {

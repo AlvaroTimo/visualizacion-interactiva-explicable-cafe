@@ -247,56 +247,70 @@ document.addEventListener("DOMContentLoaded", function() {
             const points = svg.selectAll("circle")
                 .data(win.data, d => d.fileName);
 
-            points.enter().append("circle")
-                .attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y))
-                .attr("r", d => globalSelectedIndices.has(d.fileName) ? SIZE_POINT_SELECTED : SIZE_POINT)
-                .attr("fill", d => getColor(d[etiquetasVisualizacion]))
-                .attr("opacity", d => d.probability / 100)
-                .on("mouseover", function (event, d) {
-                    event.stopPropagation();
-                    d3.select(this)
-                        .transition()
-                        .duration(100)
-                        .style('opacity', 0.3);
+                points.enter().append("circle")
+                    .attr("cx", d => xScale(d.x))
+                    .attr("cy", d => yScale(d.y))
+                    .attr("r", d => globalSelectedIndices.has(d.fileName) ? SIZE_POINT_SELECTED : SIZE_POINT)
+                    .attr("fill", d => getColor(d[etiquetasVisualizacion])) 
+                    .attr("opacity", d => {
+                        if (globalSelectedIndices.size > 0) {
+                            return globalSelectedIndices.has(d.fileName) ? 2 : 0.2;
+                        }
+                        return d.probability / 100;
+                    })
+                    .attr("stroke", d => {
+                        if (selectedNodesNJ.has(d.fileName)) {
+                            return "yellow";
+                        } else if (globalSelectedIndices.has(d.fileName)) {
+                            return "red";
+                        } else {
+                            return "black";
+                        }
+                    }) 
+                    .attr("stroke-width", d => globalSelectedIndices.has(d.fileName) || selectedNodesNJ.has(d.index) ? 3 : 1) 
+                    .classed("selected-point", d => globalSelectedIndices.has(d.fileName)) 
+                    .on("mouseover", function (event, d) {
+                        event.stopPropagation();
+                        d3.select(this)
+                            .transition()
+                            .duration(100)
+                            .style('opacity', 0.3);
 
-                    tooltip.transition()
-                        .duration(100)
-                        .style("opacity", 0.9);
+                        tooltip.transition()
+                            .duration(100)
+                            .style("opacity", 0.9);
 
-                    const clases = parsedData["Nombres de las clases"];
-                    // const probabilities = parsedData["Probabilidades"]
-                    
-                    tooltip.html(`<div style="text-align: center;">
-                                <img id="tooltip-image" src="${d.src}" alt="Imagen del grano de cafe"">
-                                <p> Real: ${clases[d.trueLabel]} </p>
-                                <p> Pred: ${clases[d.predictLabel]} </p>
-                                <p> Prob: ${d.probability} %</p>
-                                
-                            </div>`)
-                            // <button id="explain-button">Explicar</button>
-                            .style("left", `${event.pageX + 10}px`)
-                            .style("top", `${event.pageY + 10}px`);
-                })
-                .on("mouseout", function (event, d) {
-                    event.stopPropagation();
-                    d3.select(this)
-                        .transition()
-                        .duration(100)
-                        .style('opacity', d.probability/100);
-                    tooltip.transition()
-                        .duration(100)
-                        .style("opacity", 0);
-                })
-                .on("click", function (event, d) {
-                    event.stopPropagation();
-                    if (globalSelectedIndices.has(d.fileName)) {
-                        globalSelectedIndices.delete(d.fileName);
-                    } else {
-                        globalSelectedIndices.add(d.fileName);
-                    }
-                    updateAllWindows();
-                });
+                        const clases = parsedData["Nombres de las clases"];
+                        tooltip.html(`<div style="text-align: center;">
+                                        <img id="tooltip-image" src="${d.src}" alt="Imagen del grano de cafe">
+                                        <p> Real: ${clases[d.trueLabel]} </p>
+                                        <p> Pred: ${clases[d.predictLabel]} </p>
+                                        <p> Prob: ${d.probability} %</p>
+                                    </div>`)
+                                .style("left", `${event.pageX + 10}px`)
+                                .style("top", `${event.pageY + 10}px`);
+                    })
+                    .on("mouseout", function (event, d) {
+                        event.stopPropagation();
+                        d3.select(this)
+                            .transition()
+                            .duration(100)
+                            .style('opacity', d => globalSelectedIndices.has(d.fileName) ? d.probability / 100 : 0.2); 
+                        tooltip.transition()
+                            .duration(100)
+                            .style("opacity", 0);
+                    })
+                    .on("click", function (event, d) {
+                        event.stopPropagation();
+                        if (globalSelectedIndices.has(d.fileName)) {
+                            globalSelectedIndices.delete(d.fileName);
+                        } else {
+                            globalSelectedIndices.add(d.fileName);
+                        }
+                        updateAllWindows();
+                    });
+
+                svg.selectAll("circle.selected-point").raise();
 
             if (isBrushActive) {
                 const brush = d3.brush()
@@ -628,7 +642,7 @@ document.addEventListener("DOMContentLoaded", function() {
             alert('No hay puntos seleccionados.');
             return;
         }
-    
+
         const selectedIndices = windows[0].data
             .map((d, index) => globalSelectedIndices.has(d.fileName) ? index : -1)  // Asignamos -1 si no cumple con la condición
             .filter(index => index !== -1);  // Filtramos los -1, quedándonos solo con los índices válidos
