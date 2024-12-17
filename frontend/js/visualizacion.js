@@ -157,21 +157,20 @@ document.addEventListener("DOMContentLoaded", function() {
         const minY = d3.min(selectedData, d => d.y);
         const maxY = d3.max(selectedData, d => d.y);
     
-        // Escalas para reescalar las coordenadas a todo el tamaño de la ventana
+        const imageSize = Math.max(70, Math.min(100, 400 / selectedData.length));
+
+        const margin = imageSize / 8.5;
         const xScale = d3.scaleLinear()
             .domain([minX, maxX])
-            .range([0, 100]); 
-    
+            .range([margin, 100 - margin]); 
+
         const yScale = d3.scaleLinear()
             .domain([minY, maxY])
-            .range([0, 100]);  // El rango de 0% a 100% para aprovechar el espacio vertical
-    
-
-        const imageSize = Math.max(70, Math.min(100, 400 / selectedData.length));
+            .range([margin, 100 - margin]); 
     
         const borderSize = Math.max(1, imageSize / 30); 
     
-        const zoomWindow = window.open('', '_blank', 'width=800,height=600');
+        const zoomWindow = window.open('', '_blank', 'width=fullscreen,height=fullscreen');
         zoomWindow.document.write(`
         <html>
           <head>

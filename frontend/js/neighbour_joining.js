@@ -1,7 +1,6 @@
 const precachedModels = {};
 window.selectedNodesNJ = new Set();
 
-
 async function loadJSON(file) {
     const response = await fetch(file);
     return response.json();
@@ -17,7 +16,6 @@ async function preloadModels(modelNames) {
     console.log("Todos los modelos se han precargado.");
 }
 
-
 async function main(model_name,selectedIndices) {
     if (!precachedModels[model_name]) {
         throw new Error(`El modelo ${model_name} no está precargado.`);
@@ -28,7 +26,6 @@ async function main(model_name,selectedIndices) {
     if (!detailsContainer.empty()) {
         detailsContainer.remove();
     }
-
 
     const { vectorsData, labelsData } = precachedModels[model_name];
     // const vectorsData = await loadJSON(`../../backend/modelos_ouput/${model_name}_vectores.json`);
